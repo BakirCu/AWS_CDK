@@ -1,21 +1,18 @@
+import logging
+from exeption_handling.lambda_rest_exception_handler import request_wrapper_with_patial
+from providers import user_repository
+from genaral_helpers.maper import list_to_list_maper, user_entity_to_dto
 
-from lambda_rest_exception_handler import request_wrapper
-from providers import db_provider
-from functools import partial
+
+LOG = logging.getLogger() 
+LOG.setLevel(logging.INFO)
 
 
-def get_all_lambda_handler(event, context):
-    data = request_wrapper(get_service, event, context)
-    return {
-                'statusCode': 200,
-                # 'body':data
-            }
-def get_service(event, context):
-    # some business logic
-    # do some validations
-    # get list from DB
-    # compose a nice dto
-    # return the result
-    data = db_provider.get_all()
-    print(data)
-    return data
+def lambda_handler(event, context):
+    return request_wrapper_with_patial(lambda_service)
+
+
+def lambda_service():
+    user_etity_list = user_repository.get_all()
+    user_dto_list = list(list_to_list_maper(user_etity_list, user_entity_to_dto))
+    return user_dto_list, 200

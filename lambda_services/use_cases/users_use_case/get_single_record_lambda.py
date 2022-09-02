@@ -1,31 +1,24 @@
-from lambda_rest_exception_handler import request_wrapper, is_valid
-from providers import db_provider
-from lamda_exceptions import BadRequestException
-from functools import partial
-import json
 
-def get_record_lambda_handler(event, context):
-    data = request_wrapper(get_service, event, context)
-    return {
-                'statusCode': 200,
-                'headers': {
-            'Content-Type': 'application/json'},
-                'body':'str(data["Item"])'
-            }
-def get_service(event, context):
-    
-    # some business logic
-    # do some validations
-    # get list from DB
-    # compose a nice dto
-    # return the result
-    
-    valid_data = json.loads(event)
-    print(valid_data)
-    id = valid_data['id']
-    if not is_valid(id):
-        raise BadRequestException("Value of 'id' must be provided as int type")
-    print(id)
-    data = db_provider.get_by_id(int(id))
-    print(str(data["Item"]))
-    return data
+import logging
+from exeption_handling.lambda_rest_exception_handler import request_wrapper_with_patial
+from providers import user_repository
+from genaral_helpers.maper import user_entity_to_dto
+import lambda_helpers.lambda_path_parametars_helper as path
+from functools import partial
+
+
+LOG = logging.getLogger() 
+LOG.setLevel(logging.INFO)
+
+
+def lambda_handler(event, context):
+    id = path.get_id_value(key= 'user_id', param_key='pathParameters',data= event)
+    lambda_service_calable = partial(lambda_service, id)
+    return request_wrapper_with_patial(lambda_service_calable)
+  
+  
+def lambda_service(id):
+    user_etity = user_repository.get_by_id(id)
+    user_dto = user_entity_to_dto(user_etity)
+    return user_dto, 200
+
