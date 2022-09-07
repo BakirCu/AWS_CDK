@@ -1,0 +1,44 @@
+1. implemet put and delete method
+2. wath you tunbe, crate dynamo_db table with columns
+tablename=users
+this table have colimns
+id-num
+country-str
+usename-str
+paswword-hash           str for now,  bytes can't be value in json 
+cars -json              list for now, have more sence
+
+3. iplement API for getinging adding full CROUD for cars 
+GET /users/{user_id}/cars 
+GET /users/{user_id}/cars/{car_id} 
+POST /users/{user_id}/cars                                  body = {"cars":[{"id":1,"type":"audi"}, {"id":4,"type":"some"}]}
+PUT /users/{user_id}/cars/{car_id}                          body = {"type":"audi"}
+PUT /users/{user_id}/cars -                                 update all cars for one pearson  same like create
+DELETE /users/{user_id}/cars/{car_id}                       
+DELETE /users/{user_id}/cars -emove all cars for pearson
+
+4.Reetaype API gateway and lambda to CDK
+
+{"id":3, "username":"dsa", "password":"dsa", "country":"USA", "cars":[{"id":1,"type":"audi"}, {"id":2,"type":"BMW"}]} for PUT, POST user
+
+
+1. user by path param? whe paramatar is requared  query param optional parametar
+
+
+helper
+
+split original file in tree files query, path and body
+clean a code remove all unnecesery coments and code add ewerything
+
+
+
+see update must be same like create investigate
+create mysql data base one tabe for cars one for user two reposotorys 
+
+
+
+[9:14 AM] Vid DeskTop (Guest)
+GET /users => 200 / list of usersGET /users/<id> => 200 / single userPOST /users => 201 / idPUT /users/<id> => 204 / return nothingDELETE /users/<id> => 204 / return nothing 
+
+
+
